@@ -2,10 +2,10 @@ from machine import Pin, PWM
 import time
 
 # Define the pins connected to the L298N
-#FrontRightWheel
-FR_IN1_PIN = 0
-FR_IN2_PIN = 1
-FR_ENA_PIN = 2
+FR_ENA_PIN = 6
+FR_IN1_PIN = 7
+FR_IN2_PIN = 8
+
 
 # Initialize the pins as output
 FR_in1 = Pin(FR_IN1_PIN, Pin.OUT)
@@ -20,22 +20,10 @@ FR_ena.freq(1000)
 def stop_motor():
     FR_in1.value(0)
     FR_in2.value(0)
-    FR_ena.duty_u16(0) # Stop the motor
-    
+    FR_ena.duty_u16(0) # Stop the motor   
     print("Motor stopped")
 
-def move_forward(speed_percent):
-    # Speed is a percentage (0 to 100), converted to 0-65535 for duty_u16
-    speed_value = int(speed_percent / 100 * 65535)
-    #in1.value(1) # Set direction
-    #in2.value(0)
-    #ena.duty_u16(speed_value) # Set speed
-    FR_in1.value(0) # Set direction
-    FR_in2.value(1)
-    FR_ena.duty_u16(speed_value) # Set speed   
-    print(f"Moving forward at {speed_percent}% speed")
-
-def move_backward(speed_percent):
+def move_motor(speed_percent):
     speed_value = int(speed_percent / 100 * 65535)
     FR_in1.value(1) # Set direction
     FR_in2.value(0)
@@ -45,14 +33,9 @@ def move_backward(speed_percent):
 
 # Main test sequence
 try:
-    move_forward(35)
-    time.sleep(3) # Run for 3 seconds
 
-    stop_motor()
-    time.sleep(1) # Stop for 1 second
-
-    move_backward(35)
-    time.sleep(3) # Run backward for 3 seconds
+    move_motor(50)
+    time.sleep(5) # Run backward for 3 seconds
 
     stop_motor()
 
